@@ -1,0 +1,46 @@
+--- testapp_old.h	2015-03-27 08:11:06.532385000 +0530
++++ testapp.h	2015-03-27 06:43:47.820632000 +0530
+@@ -20,6 +20,9 @@
+  *
+  * 
+  */
++ 	// inherited from Application base class.
++	virtual void StartApplication (void);    // Called at time specified by Start
++	virtual void StopApplication (void);     // Called at time specified by Stop
+ };
+ 
+ }
+--- testapp_old.cc	2015-03-27 08:11:06.532385000 +0530
++++ testapp.cc	2015-03-27 07:34:48.092488000 +0530
+@@ -31,5 +31,15 @@
+  * XXX: IMPLEMENT TWO METHODS HERE
+  * 
+  * */
++void TestApplication::StartApplication (void)
++{
++	NS_LOG_FUNCTION(this);
++	NS_LOG_UNCOND("Hello World!");
++}
+ 
++void TestApplication::StopApplication (void)
++{
++	NS_LOG_FUNCTION(this);
++	NS_LOG_UNCOND("Goodbye World!");
++}
+ } // namespace ns3
+--- testapp-sim_old.cc	2015-03-27 08:11:06.532385000 +0530
++++ testapp-sim.cc	2015-03-27 07:34:17.600489000 +0530
+@@ -20,7 +20,12 @@
+    * second of simulation time respectively.
+    * 
+    * */
+-
++  Ptr<TestApplication> app = CreateObject<TestApplication> ();
++  app->SetStartTime (Seconds (1));
++  app->SetStopTime (Seconds (2));
++  nodes.Get (0)->AddApplication (app);
++  
++  Simulator::Stop (Seconds (3));
+   Simulator::Run ();
+   Simulator::Destroy ();
+   return 0;
